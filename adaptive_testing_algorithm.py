@@ -21,13 +21,28 @@ questions_df = testitems_df.query(' diff == 2 ')
 print(questions_df.head)
 
 # TODO: present first question to the test taker
-
+# shuffles the datagrame
 questions_df = questions_df.sample(frac=1)
 print(questions_df.head)
+# takes the first row of the dataframe as the first question
 firstq = questions_df.iloc[0]
 print(firstq)
 
 # TODO: receive test taker's response and evaluate its correctness
+# list of responses that the student can answer
+# IDK is arbitrary for the identification questions
+# temporarily a dictionary; will take in HTML form responses in the future
+responses_list = ['A', 'B', 'C', 'D', 'TRUE', 'FALSE', 'IDK']
+
+# randomizes student answer from list in the dictionary
+import random
+student_response = random.choice(responses_list)
+print(student_response)
+
+# checks if the answer is correct
+correct = False
+if student_response == firstq['answer']:
+    correct = True
 
 # TODO: calculate test taker's performance metrics based on responses such as number of correct answers and response time
 
