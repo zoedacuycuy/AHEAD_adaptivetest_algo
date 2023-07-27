@@ -1,4 +1,18 @@
 # TODO: interact with database
+# Database not given
+# Assume database is comprised of 2 tables, student and testitems
+# Tables not given, use Pandas dataframe and randomly generated values for both tables in the meantime
+import pandas as pd
+
+student_path = r'E:\AHEAD Work Files\Adaptive Tech\Adaptive Testing Algorithm\AHEAD_adaptivetest_algo\table_students.csv'
+testitems_path = r'E:\AHEAD Work Files\Adaptive Tech\Adaptive Testing Algorithm\AHEAD_adaptivetest_algo\table_testitems.csv'
+
+student_df = pd.read_csv(student_path)
+print(student_df.shape)
+print(student_df.head)
+print(student_df.dtypes)
+testitems_df = pd.read_csv(testitems_path)
+print(testitems_df.shape)
 
 # TODO: initialize test with initial set of questions of moderate difficulty
 
