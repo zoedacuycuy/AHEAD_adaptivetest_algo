@@ -16,6 +16,10 @@ print(testitems_df.shape)
 
 # TODO: initialize test with initial set of questions of moderate difficulty
 
+# filters out questions to get moderate difficulty only
+questions_df = testitems_df.query(' diff == 2 ')
+print(questions_df.head)
+
 # TODO: present first question to the test taker
 
 # TODO: receive test taker's response and evaluate its correctness
