@@ -22,6 +22,11 @@ print(questions_df.head)
 
 # TODO: present first question to the test taker
 
+questions_df = questions_df.sample(frac=1)
+print(questions_df.head)
+firstq = questions_df.iloc[0]
+print(firstq)
+
 # TODO: receive test taker's response and evaluate its correctness
 
 # TODO: calculate test taker's performance metrics based on responses such as number of correct answers and response time
