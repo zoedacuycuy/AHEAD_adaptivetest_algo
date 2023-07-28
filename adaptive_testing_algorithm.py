@@ -8,7 +8,7 @@ import math
 
 student_path = r'E:\AHEAD Work Files\Adaptive Tech\Adaptive Testing Algorithm\AHEAD_adaptivetest_algo\table_students.csv'
 testitems_path = r'E:\AHEAD Work Files\Adaptive Tech\Adaptive Testing Algorithm\AHEAD_adaptivetest_algo\table_testitems.csv'
-
+# stores table into a pandas file
 student_df = pd.read_csv(student_path)
 
 # student taking the test is assumed to be the first row
@@ -16,6 +16,8 @@ student_df = pd.read_csv(student_path)
 # should be taken from account in UI
 student_df = student_df.sample(frac=1)
 current_student = student_df.iloc[0]
+
+# proficiency used similar to MMR
 current_student_proficiency = current_student.loc['proficiency']
 current_student_proficiency = current_student_proficiency / 10 * 3
 print("current student prof: " + str(current_student_proficiency))
@@ -29,6 +31,7 @@ testitems_df = pd.read_csv(testitems_path)
 difficulty_level = 2
 
 
+# variables to calculate feedback after test
 true_score = 0 # score of student after the test
 expected_score = 0 # depends on probability as calculated by 3PL
 
@@ -71,7 +74,7 @@ for i in range(num_questions):
     probability = current_question['guess'] + ( (1 - current_question['guess']) / (1+math.exp((-1.702 * (current_question['discrim'] / 10) ) * (current_student['proficiency'] - current_question['diff']) )))
     print("probability: " + str(probability))
 
-    # if probability is higher than 80%, student should be able to answer
+    # if probability is higher than 80%, student is expected to answer
     if probability >= 0.8:
         expected_score += 1
 
