@@ -3,6 +3,8 @@
 # Assume database is comprised of 2 tables, student and testitems
 # Tables not given, use Pandas dataframe and randomly generated values for both tables in the meantime
 import pandas as pd
+import random
+import math
 
 student_path = r'E:\AHEAD Work Files\Adaptive Tech\Adaptive Testing Algorithm\AHEAD_adaptivetest_algo\table_students.csv'
 testitems_path = r'E:\AHEAD Work Files\Adaptive Tech\Adaptive Testing Algorithm\AHEAD_adaptivetest_algo\table_testitems.csv'
@@ -25,50 +27,53 @@ testitems_df = pd.read_csv(testitems_path)
 
 # filters out questions to get moderate difficulty only
 difficulty_level = 2
-questions_df = testitems_df.query(' diff == {} '.format(difficulty_level))
 
-# TODO: present first question to the test taker
-# shuffles the datagrame
-questions_df = questions_df.sample(frac=1)
+num_questions = 10
+for i in range(num_questions):
+    questions_df = testitems_df.query(' diff == {} '.format(difficulty_level))
 
-# takes the first row of the dataframe as the first question
-firstq = questions_df.iloc[0]
-print(firstq)
+    # TODO: present question to the test taker
+    # shuffles the dataframe
+    questions_df = questions_df.sample(frac=1)
 
-# TODO: receive test taker's response and evaluate its correctness
-# list of responses that the student can answer
-# IDK is arbitrary for the identification questions
-# temporarily a dictionary; will take in HTML form responses in the future
-responses_list = ['A', 'B', 'C', 'D', 'TRUE', 'FALSE', 'IDK']
+    # takes the first row of the dataframe as the first question
+    current_question = questions_df.iloc[0]
+    print(current_question)
 
-# randomizes student answer from list in the dictionary
-import random
-student_response = random.choice(responses_list)
+    # TODO: receive test taker's response and evaluate its correctness
+    # list of responses that the student can answer
+    # IDK is arbitrary for the identification questions
+    # temporarily a dictionary; will take in HTML form responses in the future
+    responses_list = ['A', 'B', 'C', 'D', 'TRUE', 'FALSE', 'IDK']
 
-# checks if the answer is correct
-correct = -1
-if student_response == firstq['answer']:
-    correct = 1
-print("correct: " + str(correct))
-# TODO: calculate test taker's performance metrics based on responses such as number of correct answers and response time
-# uses the 3PL formula to calculate the probability of the student to answer correctly
-import math
-probability = firstq['guess'] + ( (1 - firstq['guess']) / (1+math.exp((-1.702 * (firstq['discrim'] / 10) ) * (current_student['proficiency'] - firstq['diff']) )))
-print("probability: " + str(probability))
+    # randomizes student answer from list in the dictionary
+    # student_response = random.choice(responses_list)
 
-# increase in student's proficiency if the answer is correct and decreases if it is wrong
-current_student_proficiency = current_student_proficiency + (( (1 * correct) / 10 * 3) *  - probability)
+    student_response = input()
 
-# TODO: select next question from question pool based on adjusted difficulty level
-if current_student_proficiency <= 1:
-    difficulty_level = 1
-elif current_student_proficiency <= 2:
-    difficulty_level = 2
-else:
-    difficulty_level = 3
+    # checks if the answer is correct
+    correct = -1
+    if student_response == current_question['answer']:
+        correct = 1
+    print("correct: " + str(correct))
+    # TODO: calculate test taker's performance metrics based on responses such as number of correct answers and response time
+    # uses the 3PL formula to calculate the probability of the student to answer correctly
+    probability = current_question['guess'] + ( (1 - current_question['guess']) / (1+math.exp((-1.702 * (current_question['discrim'] / 10) ) * (current_student['proficiency'] - current_question['diff']) )))
+    print("probability: " + str(probability))
 
-# TODO: if test taker answers a question correctly within a time frame, increase the difficulty level for the next question
-# TODO: if test taker answers a question incorrectly, decrease difficulty level for the next question
+    # TODO: if test taker answers a question correctly within a time frame, increase the difficulty level for the next question
+    # TODO: if test taker answers a question incorrectly, decrease difficulty level for the next question
+    # increase in student's proficiency if the answer is correct and decreases if it is wrong
+    current_student_proficiency = current_student_proficiency + (( (1 * correct) / 10 * 3) *  probability)
+    print("proficiency: " + str(current_student_proficiency))
+    # TODO: select next question from question pool based on adjusted difficulty level
+    if current_student_proficiency <= 1:
+        difficulty_level = 1
+    elif current_student_proficiency <= 2:
+        difficulty_level = 2
+    else:
+        difficulty_level = 3
+
 
 # TODO: Present next question to test taker until test is completed
 
